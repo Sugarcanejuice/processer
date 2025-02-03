@@ -1,0 +1,56 @@
+import processing.serial.*;
+
+Serial myPort;
+float x1, y1, x2, y2;
+int count = 0;
+String values = "23, 25, 50";
+int startIdx, endIdx;
+String substr;
+float val1, val2, val3;
+
+void setup() {
+  startIdx = 0;
+  x1 = 0;
+  y1 = height/2;
+  for(int i = 50; i <= width; i+= 50) {
+    line(50, i, width, i);
+  }
+  for(int i = 50; i <= width; i+= 50) {
+    line(i, height - 50, i, 0);
+  }
+  size(800, 600);
+  printArray(Serial.list());
+  myPort = new Serial(this, Serial.list()[0], 9600);
+  endIdx = values.indexOf(',', startIdx);
+  endIdx = values.indexOf(',', startIdx);
+  if (endIdx != -1) {
+    substr = values.substring(startIdx, endIdx);
+    val1 = Float.parseFloat(substr);
+    println(val1);
+    startIdx = endIdx + 1;
+  }
+  endIdx = values.indexOf(',', startIdx);
+  if (endIdx != -1) {
+    substr = values.substring(startIdx, endIdx);
+    val2 = Float.parseFloat(substr);
+    println(val2);
+    startIdx = endIdx + 1;
+  }
+  if (endIdx < values.length()-1) {
+    substr = values.substring(startIdx);
+    val3 = Float.parseFloat(substr);
+    println(val3);
+  }
+}
+
+void draw() {
+  while (myPort.available() > 0) {
+    String inBuffer = myPort.readString();  
+    
+    if (inBuffer != null) {
+      println(inBuffer);
+      x2 = x1+50;
+
+    }
+  }
+}
